@@ -1,0 +1,22 @@
+{
+  "name": "20200517",
+  "version": "1.0.0",
+  "description": "",
+  "main": "jax.js",
+  "scripts": {
+    "start": "node jax.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "format": "prettier-eslint *.js --write"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mathjax": "^3.0.5",
+    "svg2img": "^0.6.1",
+    "uninstall": "0.0.0"
+  },
+  "devDependencies": {
+    "prettier-eslint": "^9.0.1",
+    "prettier-eslint-cli": "^5.0.0"
+  }
+}
