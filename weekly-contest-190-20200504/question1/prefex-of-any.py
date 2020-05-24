@@ -12,6 +12,16 @@ def isPrefixOfWord(sentence, searchWord):
         return -1
 
 
+def isPrefixOfWord_short(sentence, searchWord):
+        """
+        :type sentence: str
+        :type searchWord: str
+        :rtype: int
+        """
+        try:
+            return 1 + next(i for i, w in enumerate(sentence.split(" ")) if w.startswith(searchWord))
+        except:
+            return -1
 
 
 inputs = [
