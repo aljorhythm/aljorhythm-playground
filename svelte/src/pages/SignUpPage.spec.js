@@ -2,6 +2,9 @@ import SignUpPage from './SignUpPage.svelte';
 import { render, screen } from '@testing-library/svelte';
 import userEvent from '@testing-library/user-event'
 import '@testing-library/jest-dom';
+import Backend from "../Backend";
+import {setupServer, setUpServer} from "msw/node"
+import {rest} from "msw"
 
 describe("Sign Up Page", () => {
     describe("Layout", () => {
@@ -51,6 +54,43 @@ describe("Sign Up Page", () => {
             await userEvent.type(passwordRepeatInput, passwordValue)
             const button = screen.getByRole("button", { name: "Sign Up" })
             expect(button).toBeEnabled()
+        })
+
+        it("sends username, email and password to backend after clicking button", async () => {
+            let requestBody
+            
+            const server = setupServer(
+                rest.post("/api/1.0/users", (req, res, ctx) => {
+                    requestBody = req
+                    return res(ctx.status(200))
+                })
+            )
+
+            server.listen()
+
+            render(SignUpPage)
+            const usernameInput = screen.getByLabelText("Username")
+            const emailInput = screen.getByLabelText("Email")
+            const passwordInput = screen.getByLabelText("Password")
+            const passwordRepeatInput = screen.getByLabelText("Password Repeat")
+
+            const data = {
+                username: "user1234",
+                password: "pass1234",
+                email: "user@users.com"
+            }
+            await userEvent.type(usernameInput, data.username)
+            await userEvent.type(emailInput, data.email)
+            await userEvent.type(passwordInput, data.password)
+            await userEvent.type(passwordRepeatInput, data.password)
+
+            const button = screen.getByRole("button", { name: "Sign Up" })
+            expect(button).toBeEnabled()
+
+            await userEvent.click(button)
+ 
+            await server.close()
+            expect(requestBody.body).toEqual(data)
         })
     })
 })
