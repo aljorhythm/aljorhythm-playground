@@ -34,7 +34,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         render::render(&mut stdout, &last_frame, &last_frame, true);
 
         loop {
-let curr_frame =            match render_rx.recv() {
+            let curr_frame = match render_rx.recv() {
                 Ok(x) => x,
                 Err(_) => break
             };
@@ -47,13 +47,13 @@ let curr_frame =            match render_rx.recv() {
     // game loop
     'gameloop: loop {
         let curr_frame = new_frame();
-        while event::poll(Duration::default())?{
+        while event::poll(Duration::default())? {
             if let Event::Key(key_event) = event::read()? {
                 match key_event.code {
                     KeyCode::Esc | KeyCode::Char('q') => {
                         audio.play("lose");
                         break 'gameloop;
-                    },
+                    }
                     _ => {}
                 }
             }
